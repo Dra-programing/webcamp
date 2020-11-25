@@ -1,0 +1,124 @@
+<body>
+<header class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+      <nav class="nav navbar-nav navbar-left">
+        <div class="" style="color: white;">
+          <h3>Bookers</h3>
+        </div>
+      </nav>
+      <nav>
+        <ul class="nav navbar-nav navbar-right">
+         <% if user_signed_in? %>
+            <li><%= link_to "Home", user_path(current_user), class: "glyphicon glyphicon-home home" %></li>
+            <li><%= link_to "Users", '/users', class: "glyphicon glyphicon-user users" %></li>
+            <li><%= link_to "Books", '/books', class: "glyphicon glyphicon-book books" %></li>
+            <li><%= link_to "logout", destroy_user_session_path, method: :delete, class: "glyphicon glyphicon-log-out " %></li>
+          <% else %>
+            <li><%= link_to "Home", '/', class: "glyphicon glyphicon-home home" %></li>
+            <li><%= link_to "About", home_about_path, class: "glyphicon glyphicon-link about" %></li>
+            <li><%= link_to "sign up", new_user_registration_path, class: "glyphicon glyphicon-edit sign_up" %></li>
+            <li><%= link_to "login", user_session_path, class: "glyphicon glyphicon-log-in sign_in" %></li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <style>
+    .container:before, .container:after {
+    content: " ";
+    display: table;
+    }
+    .body {
+    margin-top: 51px;
+
+    }
+    .row:before, .row:after {
+    content: " ";
+    display: table;
+    }
+    .btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    }
+  </style>
+
+  <div class="body">
+    <div class="container">
+      <% if flash[:notice] %>
+        <p><%= flash[:notice] %></p>
+      <% end %>
+      <div class="row">
+        <div class="col-xs-3">
+          <h2>User info</h2>
+          <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', class: "img-circle pull-left profile-img", fallback: "no_image.jpg" %>
+          <table class="table">
+            <tbody>
+              <tr></tr>
+              <tr>
+                <th><p>name</p></th>
+                <th><%= @user.name %></th>
+              </tr>
+              <tr>
+                <th><p>introduction</p></th>
+                <th><%= @user.introduction %></th>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+              <%= link_to edit_user_path(@user), class: "col-xs-12 btn btn-default" do %>
+                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+              <% end %>
+          </div>
+          <h2>New book</h2>
+          <%= form_with model: @book, local:true do |f| %>
+            <%= render partial: "error_message" %>
+            <div class="field row">
+                <h4>Title</h4>
+                <%= f.text_field :title %></br>
+            </div>
+            <div class="field row">
+                <h4>Body</h4>
+                <%= f.text_area :body %>
+            </div>
+            <div class="actions row">
+                <%= f.submit "Create Book", class: "btn btn-primary col-xs-12" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-xs-9">
+          <h2>Users</h2>
+          <table class="table table-hover table-inverse">
+            <thead>
+              <tr>
+                <th>image</th>
+                <th>name</th>
+                <th colspan="3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td><%= attachment_image_tag user, :profile_image, :fill, 100, 100, format: 'jpeg', class: "attachment user profile_image fallback", fallback: "no_image.jpg", size:'50x50' %></td>
+                  <td><%= user.name %></th>
+                  <td><%= link_to "Show", user_path(user.id) %></th>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<footer>
+  <div class="container">
+  	<div class="row">
+    	<div class="col-xs-3 col-xs-offset-9">
+    		<p>CopyRight Infratop.inc</p>
+    	</div>
+    </div>
+  </div>
+</footer>
